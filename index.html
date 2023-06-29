@@ -13,7 +13,7 @@
         <div class="page">
             <div class="left-page">
                 <div class="content">
-                    <div class="img-content" onclick="PlayMusic()" id="playImg">
+                    <div class="img-content" onclick="app.PlayMusic()" id="playImg">
                         <img src="./IMG/327092961_756921215716358_372199567178802957_n-1-683x1024.jpg" alt="Lofi" class="img-lofi">
                         <i class="bi bi-play-circle play-icon"></i>
                     </div>
@@ -24,7 +24,7 @@
                         </p>
                     </div>
                     <div class="btn-music">
-                        <button id="playAll" class="btn-play" onclick="PlayMusic()"><i class="bi bi-play-fill" style="margin-right: 8px;"></i>TIẾP TỤC PHÁT</button>
+                        <button id="playAll" class="btn-play" onclick="app.PlayMusic()"><i class="bi bi-play-fill" style="margin-right: 8px;"></i>TIẾP TỤC PHÁT</button>
                     </div>
                 </div>
             </div>
@@ -36,30 +36,27 @@
                     <div class="col-5">ALBUM</div>
                     <div class="col-2">THỜI GIAN</div>
                 </div>
-                <div id="list-music">   
+                <div id="list-music"></div>
                     
-                </div>
             </div>
         </div>
         <div class="bottom-page">
-            <div class="left-bottom">
-                
-            </div>
+            <div class="left-bottom"></div>
 
             <!--Button-->
             <div class="right-bottom">
                 <div class="function-app">
-                    <i class="bi bi-shuffle btn-bottom" id="random" onclick="randomMusic()"></i>
-                    <i class="bi bi-skip-start-fill btn-bottom" id="back" onclick="backToPath()"></i>
+                    <i class="bi bi-shuffle btn-bottom" id="random" onclick="app.randomMusic()"></i>
+                    <i class="bi bi-skip-start-fill btn-bottom" id="back" onclick="app.backToPath()"></i>
                     <i class="bi bi-play-circle play" id="play"></i>
                     <i class="bi bi-pause-circle pause" id="pause"></i>
-                    <i class="bi bi-skip-end-fill btn-bottom" id="next" onclick="nextToPath()"></i>
-                    <i class="bi bi-repeat btn-bottom" id="repeat" onclick="repeatMusic()"></i>
+                    <i class="bi bi-skip-end-fill btn-bottom" id="next" onclick="app.nextToPath()"></i>
+                    <i class="bi bi-repeat btn-bottom" id="repeat" onclick="app.repeatMusic()"></i>
                 </div>
                 <div class="line">
                     <div class="col-time" style="text-align: right;" id="timeFirst">00:00</div>
-                    <progress class="col-progress" value="0" max="221.413878"></progress>
-                    <div class="col-time" style="text-align: left;" id="timeLast">03:13</div>
+                    <progress class="col-progress" value="0" max="0"></progress>
+                    <div class="col-time" style="text-align: left;" id="timeLast"></div>
                 </div>
             </div>
         </div>

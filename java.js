@@ -14,12 +14,15 @@
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
 const player = $('.main')
-const playBtn = document.getElementById("play")
-const pauseBtn = document.getElementById("pause")
+ var playBtn = document.getElementById("play")
+var pauseBtn = document.getElementById("pause")
 const audio = $('#audio')
 var toPath = "";
 var idMusic = "";
 var dem = false;
+var isPlay = true;
+var playe = document.getElementById("playAll")
+var playee = document.getElementById("playImg")
 
 function formatTime(time){
     var minutes = Math.floor(time/60)
@@ -30,7 +33,7 @@ function formatTime(time){
 
 const app = {
 
-    currentIndex: 4,
+    currentIndex: "",
 
     songs: [
         {
@@ -112,64 +115,13 @@ const app = {
             img: "./IMG/10/NgheNhuTinhYeu.PNG",
             album: "",
             author: "RPT MCK"
-        }],
+    }],
 
-    defineProperties: function(){
-        Object.defineProperty(this, 'currentSong',{
-            get:function(){
-            return this.songs[this.currentIndex]
-            }
-        })
-    },
-
-    loadCurrentSong: function(id){
-        const load = $(".left-bottom")
-        this.songs.forEach(
-            music => {
-            if(music.id == this.currentIndex){
-                load.innerHTML = `
-                    <div class="music">
-                        <div class="img-music">
-                            <img src="${music.img}" alt="" class="img-one-music">
-                        </div>
-                        <div class="info-music">
-                            <b>${music.name}</b>
-                            <div class="title">${music.author}</div>
-                        </div>
-                    </div>
-                `
-            }
-        });
-    },
-
-
-    getTimeMusic: function(){
-        this.songs.forEach(function(music) {
-            var timeMusic = document.getElementById("time-music-"+ music.id)
-            var pathMusic = music.path;
-
-            var audio = new Audio(pathMusic)
-            audio.addEventListener('loadedmetadata', function(){
-                timeMusic.innerHTML = formatTime(audio.duration)
-            })
-        })
-    },  
-
-
-
-    getPath: function(id) {
-        var path = document.getElementById("music"+id);
-        toPath = path;
-        if(idMusic == id) PlayMusic();
-        else if(idMusic != id && dem != false) handlePlayMusic();
-        idMusic = id;
-        dem = true;
-    },
-
+    //render nhạc
     render: function(){
         const htmls = this.songs.map(music => {
             return `
-            <div class="music-item" id="${music.id}" onclick="getPath(${music.id})">
+            <div class="music-item" id="${music.id}" onclick="app.getPath(${music.id})">
             <div class="col-5">
                 <div class="music">
                     <div class="img-music">
@@ -193,21 +145,94 @@ const app = {
         this.getTimeMusic()
     },
 
-    PlayMusic: function(){
-        
+    //Lấy ra bài hát hiện tại
+    defineProperties: function(){
+        Object.defineProperty(this, 'currentSong',{
+            get:function(){
+            return this.songs[this.currentIndex]
+            }
+        })
     },
 
-    handleEvent: function(){
-        //play
-        playBtn.onclick = function(){
-            audio.PlayMusic()
-            player.classList.add('playing')
-        }
-        //pause
-    }
-    ,
+    //Tải hình bên dưới
+    loadCurrentSong: function(id){
+        const load = $(".left-bottom")
+        this.songs.forEach(
+            music => {
+            if(music.id == id){
+                load.innerHTML = `
+                    <div class="music">
+                        <div class="img-music">
+                            <img src="${music.img}" alt="" class="img-one-music">
+                        </div>
+                        <div class="info-music">
+                            <b>${music.name}</b>
+                            <div class="title">${music.author}</div>
+                        </div>
+                    </div>
+                `
+            }
+        });
+    },
 
-    
+    //Lấy thời gian
+    getTimeMusic: function(){
+        this.songs.forEach(function(music) {
+            var timeMusic = document.getElementById("time-music-"+ music.id)
+            var pathMusic = music.path;
+
+            var audio = new Audio(pathMusic)
+            audio.addEventListener('loadedmetadata', function(){
+                timeMusic.innerHTML = formatTime(audio.duration)
+            })
+        })
+    },  
+
+    stopMusic: function(path){
+        const audioElenment = $$("audio")
+
+        audioElenment.forEach(audio => {
+            if(audio.src != path){
+                audio.pause();
+                audio.currentTime = 0;
+            }
+        })
+    },
+
+    getPath: function(id){
+        var path = document.getElementById("music"+id);
+        toPath = path;
+        if(this.currentIndex == id) this.PlayMusic();
+        else if(this.currentIndex != id && dem != false) this.handlePlayMusic();
+        this.currentIndex = id;
+        dem = true;
+        this.eventMusic();
+        this.stopMusic(toPath.src);
+        this.loadCurrentSong(this.currentIndex)
+    },
+
+    handlePlayMusic: function(){
+        this.eventPlayMusic(toPath)
+    },
+
+    eventPlayMusic: function(eventPlay){
+        playBtn.style.display = "none"
+        pauseBtn.style.display = "block"
+        eventPlay.play()
+    },
+
+    eventMusic: function(){
+        playBtn.addEventListener("mouseup", function(){
+            eventPlayMusic(toPath)
+        })
+    },
+
+    PlayMusic: function(){
+        isPlay = !isPlay;
+        if(isPlay){
+            this.handlePlayMusic()
+        }
+    },
 
     start: function(){
         //Dinh Nghia cac thuoc tinh cua object
@@ -215,13 +240,12 @@ const app = {
         //render playlist
         this.render()
         //su ly cac su kien trong list
-        this.handleEvent()
 
         //load currentSong
         this.loadCurrentSong(this.currentIndex)
         //Lay duong dan
-
-        this.getPath(1)
+        this.getPath(5
+)
     }
 }
 
