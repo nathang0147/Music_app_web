@@ -31,6 +31,7 @@ function formatTime(time){
     return formattedTime
 }
 
+
 const app = {
 
     currentIndex: "",
@@ -188,6 +189,7 @@ const app = {
         })
     },  
 
+    //dừng nhạc
     stopMusic: function(path){
         const audioElenment = $$("audio")
 
@@ -208,11 +210,28 @@ const app = {
         dem = true;
         this.eventMusic();
         this.stopMusic(toPath.src);
-        this.loadCurrentSong(this.currentIndex)
+        this.loadCurrentSong(this.currentIndex);
     },
 
     handlePlayMusic: function(){
         this.eventPlayMusic(toPath)
+    },
+
+    handlePauseMusic: function(){
+        this.eventPauseMusic(toPath)
+    },
+
+    pauseMusic: function(){
+        playe.innerHTML = `<i class="bi bi-pause-circle" style = "margin-right: 8px;"></i>"TIEP TUC PHAT"`
+        playee.innerHTML = `<img src="./IMG/327092961_756921215716358_372199567178802957_n-1-683x1024.jpg" alt="Lofi" class="img-lofi"><i class="bi bi-pause-circle play-icon"></i>`
+    },
+
+    eventPauseMusic: function(eventPause){
+        playBtn.style.display = "block"
+        pauseBtn.style.display = "none"
+        playe.innerHTML = `<i class="bi bi-play-fill" style = "margin-right: 8px;"></i>"TIEP TUC PHAT"`
+        playee.innerHTML = `<img src="./IMG/327092961_756921215716358_372199567178802957_n-1-683x1024.jpg" alt="Lofi" class="img-lofi"><i class="bi bi-play-circle play-icon"></i>`
+        eventPause.pause()
     },
 
     eventPlayMusic: function(eventPlay){
@@ -223,7 +242,11 @@ const app = {
 
     eventMusic: function(){
         playBtn.addEventListener("mouseup", function(){
-            eventPlayMusic(toPath)
+            this.eventPlayMusic(toPath)
+        })
+
+        pauseBtn.addEventListener("mousedown", function(){
+            this.eventPauseMusic(toPath)
         })
     },
 
