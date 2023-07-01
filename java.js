@@ -221,15 +221,15 @@ const app = {
         this.eventPauseMusic(toPath)
     },
 
-    pauseMusic: function(){
-        playe.innerHTML = `<i class="bi bi-pause-circle" style = "margin-right: 8px;"></i>"TIEP TUC PHAT"`
+    pauseMessage: function(){
+        playe.innerHTML = `<i class="bi bi-pause-circle" style = "margin-right: 8px;"></i>TIEP TUC PHAT`
         playee.innerHTML = `<img src="./IMG/327092961_756921215716358_372199567178802957_n-1-683x1024.jpg" alt="Lofi" class="img-lofi"><i class="bi bi-pause-circle play-icon"></i>`
     },
 
     eventPauseMusic: function(eventPause){
         playBtn.style.display = "block"
         pauseBtn.style.display = "none"
-        playe.innerHTML = `<i class="bi bi-play-fill" style = "margin-right: 8px;"></i>"TIEP TUC PHAT"`
+        playe.innerHTML = `<i class="bi bi-play-fill" style = "margin-right: 8px;"></i>TIEP TUC PHAT`
         playee.innerHTML = `<img src="./IMG/327092961_756921215716358_372199567178802957_n-1-683x1024.jpg" alt="Lofi" class="img-lofi"><i class="bi bi-play-circle play-icon"></i>`
         eventPause.pause()
     },
@@ -237,6 +237,7 @@ const app = {
     eventPlayMusic: function(eventPlay){
         playBtn.style.display = "none"
         pauseBtn.style.display = "block"
+        this.pauseMessage()
         eventPlay.play()
     },
 
@@ -245,7 +246,7 @@ const app = {
             this.eventPlayMusic(toPath)
         })
 
-        pauseBtn.addEventListener("mousedown", function(){
+        pauseBtn.addEventListener("mouseup", function(){
             this.eventPauseMusic(toPath)
         })
     },
@@ -254,6 +255,8 @@ const app = {
         isPlay = !isPlay;
         if(isPlay){
             this.handlePlayMusic()
+        }else{
+            this.handlePauseMusic()
         }
     },
 
@@ -267,8 +270,7 @@ const app = {
         //load currentSong
         this.loadCurrentSong(this.currentIndex)
         //Lay duong dan
-        this.getPath(5
-)
+        this.getPath(5)
     }
 }
 
