@@ -23,6 +23,9 @@ var dem = false;
 var isPlay = true;
 var playe = document.getElementById("playAll")
 var playee = document.getElementById("playImg")
+var process = $("progress")
+var isRandomOn = false
+// var numberRD = randomeID()
 
 function formatTime(time){
     var minutes = Math.floor(time/60)
@@ -30,6 +33,13 @@ function formatTime(time){
     var formattedTime = (minutes < 10 ? '0':'')+minutes+':'+(remainSecond < 10 ? "0": '') + remainSecond;
     return formattedTime
 }
+
+process.addEventListener("click", function(e){
+    var result = (e.clientX-process.getBoundingClientRect().left)/process.offsetWidth*100
+    var valueTime = (process.max*result)/100
+    process.setAttribute("value", valueTime)
+    toPath.currentTime = valueTime
+})
 
 
 const app = {
@@ -42,7 +52,7 @@ const app = {
             name: "Tại Vì Sao",
             path: "./IMG/1/y2mate.com - 11Tại Vì Sao  RPT MCK  99 the album.mp3",
             img: "./IMG/1/TaiViSao.jpg",
-            album: "",
+            album: "Thang deptrai",
             author: "RPT MCK"
         },
         {
@@ -210,9 +220,29 @@ const app = {
         dem = true;
         this.eventMusic();
         this.stopMusic(toPath.src);
+        this.handleTimeMusiclast()
         this.loadCurrentSong(this.currentIndex);
     },
 
+    //Xử lý thanh thời gian
+        
+    handleTimeMusiclast:function(){
+        var audio = new Audio(toPath.src);
+        audio.addEventListener("loadedmetadata", function(){
+            $("#timeLast").innerHTML = formatTime(toPath.duration)
+            process.setAttribute("max", toPath.duration);
+        })
+
+    },
+
+    handleTimeMusicFirst:function(){
+        toPath.addEventListener("timeupdate", function(){
+            $("#timeFirst").innerHTML = formatTime(toPath.currentTime)
+            process.setAttribute("value", toPath.currentTime)
+        })
+    },
+
+    //Event play and pause
     handlePlayMusic: function(){
         this.eventPlayMusic(toPath)
     },
@@ -222,14 +252,14 @@ const app = {
     },
 
     pauseMessage: function(){
-        playe.innerHTML = `<i class="bi bi-pause-circle" style = "margin-right: 8px;"></i>TIEP TUC PHAT`
+        playe.innerHTML = `<i class="bi bi-pause-circle" style = "margin-right: 8px;"></i>TẠM NGƯNG`
         playee.innerHTML = `<img src="./IMG/327092961_756921215716358_372199567178802957_n-1-683x1024.jpg" alt="Lofi" class="img-lofi"><i class="bi bi-pause-circle play-icon"></i>`
     },
 
     eventPauseMusic: function(eventPause){
         playBtn.style.display = "block"
         pauseBtn.style.display = "none"
-        playe.innerHTML = `<i class="bi bi-play-fill" style = "margin-right: 8px;"></i>TIEP TUC PHAT`
+        playe.innerHTML = `<i class="bi bi-play-fill" style = "margin-right: 8px;"></i>TIẾP TỤC PHÁT`
         playee.innerHTML = `<img src="./IMG/327092961_756921215716358_372199567178802957_n-1-683x1024.jpg" alt="Lofi" class="img-lofi"><i class="bi bi-play-circle play-icon"></i>`
         eventPause.pause()
     },
@@ -250,6 +280,78 @@ const app = {
             this.eventPauseMusic(toPath)
         })
     },
+    
+    // randomeID: function(){
+    //     var generateNumber = []
+    //     for(var i = 0; i < this.songs.length; i ++){
+    //         this.generateRandomIndex(generateNumber)
+    //     }
+    //     return generateNumber;
+    // },
+
+    
+
+    randomMusic: function(){
+        var rd = document.getElementById("random")
+        isRandomOn = !isRandomOn
+        if(isRandomOn){
+            rd.style.color = "#9681EB"
+        }else{
+            rd.style.color = "white"
+        }
+    },
+
+    //Xoa nhac
+    // deletePlay : function(){
+    //     var indexOfMusic = this.randomeID().indexOf(this.currentIndex)
+    //     for(var i = indexOfMusic; i < this.randomeID().length -1; i++){
+    //         this.randomeID()[i] = this.randomeID()[i+1]
+    //     }
+    //     this.randomeID().pop()
+    // },
+    generateRandomIndex: function(){
+        let newIndex = Math.floor(Math.random()*this.songs.length) + 1
+        // do{
+        //     this.newIndex = Math.floor(Math.random()*this.songs.length) + 1
+        // }while (generateNumber.indexOf(newIndex) !== -1)
+        console.log("" + newIndex)
+        return newIndex
+    },
+
+    nextToPath: function(){
+        if(isRandomOn){
+            this.nextToNomal(this.generateRandomIndex())
+            
+        }else{
+            this.nextToNomal(this.currentIndex + 1)
+        }
+    },
+
+    backToPath: function(){
+        
+    },
+
+    nextToNomal: function(index){
+        this.currentIndex = index;
+        if(this.currentIndex >= this.songs.length){
+            this.currentIndex = 1;
+        }
+        this.getPath(this.currentIndex)
+        this.eventPlayMusic(toPath)
+        this.pauseMessage();
+    },
+
+    // nextToRandom: function(){
+    //     if(numberRD.length === 0){
+    //         numberRD = randomeID()
+    //         this.deletePlay()
+    //     }
+    //     this.getPath(numberRD[0])
+    //     this.eventPlayMusic(toPath)
+    //     this.deletePlay()
+    //     this.pauseMessage()
+    // },
+    
 
     PlayMusic: function(){
         isPlay = !isPlay;
@@ -259,6 +361,7 @@ const app = {
             this.handlePauseMusic()
         }
     },
+
 
     start: function(){
         //Dinh Nghia cac thuoc tinh cua object
@@ -271,8 +374,29 @@ const app = {
         this.loadCurrentSong(this.currentIndex)
         //Lay duong dan
         this.getPath(5)
+        setInterval(this.handleTimeMusicFirst,1000)
     }
 }
+
+// function randomeID(){
+//     var generateNumber = []
+//     for(var i = 0; i < app.songs.length; i ++){
+//         this.generateRandomIndex(generateNumber)
+//     }
+//     return generateNumber;
+// }
+
+
+
+
+// //Xoa nhac
+// function deletePlay(){
+//     var indexOfMusic = numberRD.indexOf(this.currentIndex)
+//     for(var i = indexOfMusic; i < this.numberRD.length -1; i++){
+//         numberRD[i] = numberRD[i+1]
+//     }
+//     numberRD.pop()
+// }
 
 
 app.start()

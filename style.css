@@ -48,7 +48,7 @@ img{
 }
 .img-content:hover .play-icon{
     display: block;
-    font-size: 100px;
+    font-size: 200px;
     cursor: pointer;
     opacity: 0.4;
 }
