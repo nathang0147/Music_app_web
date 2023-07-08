@@ -25,6 +25,9 @@ var playe = document.getElementById("playAll")
 var playee = document.getElementById("playImg")
 var process = $("progress")
 var isRandomOn = false
+var isRepeat = false
+var nextBtn = document.getElementById("next")
+const audioElenment = $$("audio")
 // var numberRD = randomeID()
 
 function formatTime(time){
@@ -40,6 +43,7 @@ process.addEventListener("click", function(e){
     process.setAttribute("value", valueTime)
     toPath.currentTime = valueTime
 })
+
 
 
 const app = {
@@ -201,7 +205,6 @@ const app = {
 
     //dừng nhạc
     stopMusic: function(path){
-        const audioElenment = $$("audio")
 
         audioElenment.forEach(audio => {
             if(audio.src != path){
@@ -281,13 +284,6 @@ const app = {
         })
     },
     
-    // randomeID: function(){
-    //     var generateNumber = []
-    //     for(var i = 0; i < this.songs.length; i ++){
-    //         this.generateRandomIndex(generateNumber)
-    //     }
-    //     return generateNumber;
-    // },
 
     
 
@@ -328,7 +324,11 @@ const app = {
     },
 
     backToPath: function(){
-        
+        if(isRandomOn){
+            this.backToNomal(this.generateRandomIndex())
+        }else{
+            this.backToNomal(this.currentIndex  - 1)
+        }
     },
 
     nextToNomal: function(index){
@@ -341,16 +341,30 @@ const app = {
         this.pauseMessage();
     },
 
-    // nextToRandom: function(){
-    //     if(numberRD.length === 0){
-    //         numberRD = randomeID()
-    //         this.deletePlay()
-    //     }
-    //     this.getPath(numberRD[0])
-    //     this.eventPlayMusic(toPath)
-    //     this.deletePlay()
-    //     this.pauseMessage()
-    // },
+    backToNomal: function(index){
+        this.currentIndex = index;
+        if(this.currentIndex >= 1){
+            this.currentIndex = this.songs.length;
+        }
+        this.getPath(this.currentIndex)
+        this.eventPlayMusic(toPath)
+        this.pauseMessage();
+    },
+
+    repeatMusic: function(){
+        const repeatBtn = document.getElementById("repeat")
+        isRepeat = !isRepeat
+        if(isRepeat){
+            repeatBtn.style.color = "#9681EB"
+            setInterval(function(){
+                if(toPath.ended){
+                    nextBtn.click()
+                }
+            },1000)
+        }else{
+            repeatBtn.style.color = "white"
+        }
+    },
     
 
     PlayMusic: function(){
@@ -375,28 +389,13 @@ const app = {
         //Lay duong dan
         this.getPath(5)
         setInterval(this.handleTimeMusicFirst,1000)
+        setInterval(function(){
+            if(toPath.ended){
+                nextBtn.click()
+            }
+        }, 1000)
     }
 }
-
-// function randomeID(){
-//     var generateNumber = []
-//     for(var i = 0; i < app.songs.length; i ++){
-//         this.generateRandomIndex(generateNumber)
-//     }
-//     return generateNumber;
-// }
-
-
-
-
-// //Xoa nhac
-// function deletePlay(){
-//     var indexOfMusic = numberRD.indexOf(this.currentIndex)
-//     for(var i = indexOfMusic; i < this.numberRD.length -1; i++){
-//         numberRD[i] = numberRD[i+1]
-//     }
-//     numberRD.pop()
-// }
 
 
 app.start()
